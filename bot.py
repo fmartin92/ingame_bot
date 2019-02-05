@@ -32,7 +32,7 @@ while True:
 		self.question.body.scraped_sites = self.question.body.scrape()
 		score = solvers.scraping(question)
 		if max(score) < 0.65:
-			print('DUDOSO', question.options[criteria(score)].original)
+			print('DUDOSO:', question.options[criteria(score)].original)
 		else:
 			print(question.options[criteria(score)].original)
 		diff = time.time()-tic
