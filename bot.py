@@ -29,7 +29,7 @@ while True:
 		tic = time.time()
 		print()
 		#print('Scraping dice:')
-		self.question.body.scraped_sites = self.question.body.scrape()
+		question.body.scraped_sites = question.body.scrape()
 		score = solvers.scraping(question)
 		if max(score) < 0.65:
 			print('DUDOSO:', question.options[criteria(score)].original)

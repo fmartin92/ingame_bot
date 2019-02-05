@@ -44,7 +44,7 @@ def naive_google(question):
 def scraping(question):
 	#accepts a question with non-empty question.body.scraped_sites
 	scores = []
-	for scraped_site in pregunta.body.scraped_sites:
+	for scraped_site in question.body.scraped_sites:
 		scraped_words = string_processing.get_tokens(scraped_site)
 		scores.append([count_occurences(scraped_words, option.processed)
 							for option in question.options])
