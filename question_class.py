@@ -57,6 +57,10 @@ class Question:
 			return 'O'
 		return 'D'
 
+	def __str__(self):
+		return self.body.original + '\n' + ' - '.join([opt.original
+													for opt in self.options])
+													
 	def __repr__(self):
 		return self.body.original + '\n' + ' - '.join([opt.original
 													for opt in self.options])
@@ -75,7 +79,7 @@ class Question:
 			if shared:
 				shared_tokens.append(option_token)
 		for option in self.options:
-			option.no_reps_processed = [token for token in option.processed
+			option.processed = [token for token in option.processed
 										if token not in shared_tokens]
 
 		self.question_type = self.classify()

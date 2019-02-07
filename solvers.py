@@ -60,6 +60,11 @@ def simple_decision_tree(question):
 		scores = scraping(question)
 	return scores
 
+def naive_and_scraping_avg(question):
+	#accepts a question with precomputed naive_google_scores
+	#and scraping_scores
+	return list(map(lambda x: sum(x)/2, zip(
+		question.naive_google_scores, question.scraping_scores)))
 #### O solvers:
 
 def O_googling(question):
