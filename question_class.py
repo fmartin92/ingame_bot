@@ -12,8 +12,6 @@ class Question_Part:
 		return google_methods.search(' '.join(self.processed))
 
 	def scrape(self, n=5, timeout=1):
-		if self.google_results == []:
-			self.google_results = self.google_search()
 		urls = [resultado.url for resultado in self.google_results][:n]
 		results = []
 		def append_result(url):
@@ -24,6 +22,12 @@ class Question_Part:
 		for thread in threads:
 			thread.join(timeout)
 		return results
+
+	def find_wiki_article(self):
+		for result in self.google_results:
+			if 'es.wikipedia.org' in result.url:
+				return result.url
+		return ''
 
 	def process(self, tokenize_quotes=False):
 		tokens = string_processing.get_tokens(self.original)
@@ -60,10 +64,23 @@ class Question:
 	def __str__(self):
 		return self.body.original + '\n' + ' - '.join([opt.original
 													for opt in self.options])
-													
+
 	def __repr__(self):
 		return self.body.original + '\n' + ' - '.join([opt.original
 													for opt in self.options])
+
+	def decide_negative(self):
+		lowered = self.body.original.lower()
+		if ' no ' in lowered or ' nunca ' in lowered:
+			quotes = ''
+			if '"' in lowered:
+				quotes = string_processing.extract_quoted(lowered)
+			if ' no ' in quotes or ' nunca ' in quotes:
+				return False
+			else:
+				return True
+		else:
+			return False
 
 	def __init__(self, body, options):
 		self.body = Question_Part(body, tokenize_quotes=True)
@@ -81,7 +98,5 @@ class Question:
 		for option in self.options:
 			option.processed = [token for token in option.processed
 										if token not in shared_tokens]
-
 		self.question_type = self.classify()
-		self.is_negative = ' no ' in self.body.original \
-							or ' nunca ' in self.body.original
+		self.is_negative = self.decide_negative()

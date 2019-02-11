@@ -90,3 +90,14 @@ def O_scraping(question, include_body=True):
 		scraped_text = string_processing.get_tokens(option.scraped_sites[0])
 		scores.append(sum([count_occurences(scraped_text, needles)]))
 	return scores
+
+def O_wikipedia(question):
+	#accepts a question with options having non-empty
+	#question.option.wiki_article
+	scores = []
+	question.body.totally_processed = question.body.process()
+	for option in question.options:
+		scores.append([count_occurences(
+							string_processing.get_tokens(option.wiki_article),
+							question.body.totally_processed)])
+	return scores
